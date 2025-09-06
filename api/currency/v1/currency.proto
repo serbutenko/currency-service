@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package currency.v1;
+
+option go_package = "example.com/currency-service/api/currency/v1;currencyv1";
+
+import "google/protobuf/timestamp.proto";
+
+service CurrencyService {
+    rpc GetRate (GetRateRequest) returns (GetRateResponse) {}
+    rpc Convert (ConvertRequest) returns (ConvertResponse) {}
+    rpc ListCurrencies (ListCurrenciesRequest) returns (ListCurrenciesResponse) {}
+}
+
+message GetRateRequest {
+  string from = 1; // код валюты ISO-4217, например "USD"
+  string to   = 2; // код валюты ISO-4217, например "EUR"
+}
+
+message ConvertRequest {
+  string from = 1; // код валюты ISO-4217, например "USD"
+  string to   = 2; // код валюты ISO-4217, например "EUR"
+  double amount = 3;
+}
+
+message ListCurrenciesRequest {}
+
+message GetRateResponse {
+  string from      = 1;
+  string to        = 2;
+  double rate      = 3; // курс (скаляр)
+  google.protobuf.Timestamp timestamp = 4; // ISO8601 в UTC, например "2025-07-24T10:15:00Z"
+}
+
+message ConvertResponse {
+  string from      = 1;
+  string to        = 2;
+  double amount    = 3;
+  double converted = 4;
+  double rate      = 5;
+}
+
+message ListCurrenciesResponse {
+  map<string, string> currencies = 1;
+}
